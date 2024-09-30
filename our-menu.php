@@ -32,6 +32,29 @@ if (isset($_POST['addcart'])) {
     <link rel="stylesheet" href="assets/css/red-color.css">
     <link rel="stylesheet" href="assets/css/yellow-color.css">
     <link rel="stylesheet" href="assets/css/responsive.css">
+    <style>
+        .input-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .input-group-btn {
+            display: inline-block;
+        }
+
+        .qtyy {
+            /* text-align: center; */
+            width: 100px;
+            border: 1px solid #ddd;
+        }
+
+        .btn {
+            padding: 5px 10px;
+            border-radius: 0;
+        }
+    </style>
 </head>
 
 <body itemscope>
@@ -98,7 +121,18 @@ if (isset($_POST['addcart'])) {
                                                         <p itemprop="description">
                                                             <input type="hidden" name="foodid"
                                                                 value="<?php echo $row['ID']; ?>">
-                                                            <input class="qty" name="foodqty" type="text" value="1">
+                                                        <div class="input-group ">
+                                                            <span class="input-group-btn">
+                                                                <button type="button" class="btn btn-danger qty-minus"
+                                                                    onclick="decrementQty(this)">-</button>
+                                                            </span>
+                                                            <input class="qtyy" name="foodqty" type="text" value="1" min="1"
+                                                                style="text-align: center; ">
+                                                            <span class="input-group-btn">
+                                                                <button type="button" class="btn btn-success qty-plus"
+                                                                    onclick="incrementQty(this)">+</button>
+                                                            </span>
+                                                        </div>
                                                         </p>
                                                         <span class="price">Rs <?php echo $row['ItemPrice']; ?></span>
 
@@ -120,30 +154,44 @@ if (isset($_POST['addcart'])) {
                                     print_r(($recommendation));
                                     if (empty($recommendations)) {
                                         echo "<p>No recommendations available.</p>";
-                                    } else {                                        
+                                    } else {
                                         foreach ($recommendations as $recommendation) {
 
                                             ?>
                                             <div class="col-md-4 col-sm-6 col-lg-4">
                                                 <div class="popular-dish-box style2 wow fadeIn" data-wow-delay="0.2s">
                                                     <div class="popular-dish-thumb">
-                                                        <a href="food-detail.php?fid=<?php echo $recommendation['ID']; ?>" title=""
-                                                            itemprop="url"><img
+                                                        <a href="food-detail.php?fid=<?php echo $recommendation['ID']; ?>"
+                                                            title="" itemprop="url"><img
                                                                 src="admin/itemimages/<?php echo $recommendation['Image']; ?>"
-                                                                alt="<?php echo $recommendation['ItemName']; ?>" itemprop="image"
-                                                                width="400" height="180"></a>
+                                                                alt="<?php echo $recommendation['ItemName']; ?>"
+                                                                itemprop="image" width="400" height="180"></a>
                                                     </div>
                                                     <div class="popular-dish-info">
                                                         <h4 itemprop="headline"><a
-                                                                href="food-detail.php?fid=<?php echo $recommendation['ID']; ?>" title=""
-                                                                itemprop="url"><?php echo $recommendation['ItemName']; ?></a></h4>
+                                                                href="food-detail.php?fid=<?php echo $recommendation['ID']; ?>"
+                                                                title=""
+                                                                itemprop="url"><?php echo $recommendation['ItemName']; ?></a>
+                                                        </h4>
                                                         <form method="post">
                                                             <p itemprop="description">
                                                                 <input type="hidden" name="foodid"
                                                                     value="<?php echo $recommendation['ID']; ?>">
-                                                                <input class="qty" name="foodqty" type="text" value="1">
+                                                            <div class="input-group">
+                                                                <span class="input-group-btn">
+                                                                    <button type="button" class="btn btn-danger qty-minus"
+                                                                        onclick="decrementQty(this)">-</button>
+                                                                </span>
+                                                                <input class="qtyy" name="foodqty" type="text" value="1" min="1"
+                                                                    style="text-align: center;">
+                                                                <span class="input-group-btn">
+                                                                    <button type="button" class="btn btn-success qty-plus"
+                                                                        onclick="incrementQty(this)">+</button>
+                                                                </span>
+                                                            </div>
                                                             </p>
-                                                            <span class="price">Rs <?php echo $recommendation['ItemPrice']; ?></span>
+                                                            <span class="price">Rs
+                                                                <?php echo $recommendation['ItemPrice']; ?></span>
 
                                                             <?php if ($_SESSION['fosuid'] == "") { ?>
                                                                 <a class="log-popup-btn btn  pull-right red-bg brd-rd3" href="#"
@@ -270,6 +318,21 @@ if (isset($_POST['addcart'])) {
     <script src="assets/js/bootstrap.min.js"></script>
     <script src="assets/js/plugins.js"></script>
     <script src="assets/js/main.js"></script>
+    <script>
+        function incrementQty(button) {
+            let qtyInput = button.closest('.input-group').querySelector('.qtyy');
+            let currentValue = parseInt(qtyInput.value);
+            qtyInput.value = currentValue + 1;
+        }
+
+        function decrementQty(button) {
+            let qtyInput = button.closest('.input-group').querySelector('.qtyy');
+            let currentValue = parseInt(qtyInput.value);
+            if (currentValue > 1) {
+                qtyInput.value = currentValue - 1;
+            }
+        }
+    </script>
 </body>
 
 </html>
