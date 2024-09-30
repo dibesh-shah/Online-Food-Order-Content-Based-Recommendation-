@@ -32,6 +32,29 @@ if($query)
     <link rel="stylesheet" href="assets/css/red-color.css">
     <link rel="stylesheet" href="assets/css/yellow-color.css">
     <link rel="stylesheet" href="assets/css/responsive.css">
+    <style>
+        .input-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .input-group-btn {
+            display: inline-block;
+        }
+
+        .qtyy {
+            /* text-align: center; */
+            width: 100px;
+            border: 1px solid #ddd;
+        }
+
+        .btn {
+            padding: 5px 10px;
+            border-radius: 0;
+        }
+    </style>
 </head>
 <body itemscope>
 <?php include_once('includes/header.php');?>
@@ -94,8 +117,18 @@ if (isset($_GET['page_no']) && $_GET['page_no']!="") {
                                             <form method="post">    
                                                    <p itemprop="description">
     <input type="hidden" name="foodid" value="<?php echo $row['ID'];?>"> 
-	<input class="qty" name="foodqty" type="text" value="1">
-                                               </p>
+    <div class="input-group ">
+                                                            <span class="input-group-btn">
+                                                                <button type="button" class="btn btn-danger qty-minus"
+                                                                    onclick="decrementQty(this)">-</button>
+                                                            </span>
+                                                            <input class="qtyy" name="foodqty" type="text" value="1" min="1"
+                                                                style="text-align: center; ">
+                                                            <span class="input-group-btn">
+                                                                <button type="button" class="btn btn-success qty-plus"
+                                                                    onclick="incrementQty(this)">+</button>
+                                                            </span>
+                                                        </div>
                                                 <span class="price">Rs <?php echo $row['ItemPrice'];?></span>
 
                               <?php if($_SESSION['fosuid']==""){?>
@@ -214,6 +247,21 @@ include_once('includes/signup.php');
     <script src="assets/js/bootstrap.min.js"></script>
     <script src="assets/js/plugins.js"></script>
     <script src="assets/js/main.js"></script>
+    <script>
+        function incrementQty(button) {
+            let qtyInput = button.closest('.input-group').querySelector('.qtyy');
+            let currentValue = parseInt(qtyInput.value);
+            qtyInput.value = currentValue + 1;
+        }
+
+        function decrementQty(button) {
+            let qtyInput = button.closest('.input-group').querySelector('.qtyy');
+            let currentValue = parseInt(qtyInput.value);
+            if (currentValue > 1) {
+                qtyInput.value = currentValue - 1;
+            }
+        }
+    </script>
 </body>	
 
 </html>
